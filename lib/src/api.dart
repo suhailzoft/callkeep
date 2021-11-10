@@ -83,7 +83,10 @@ class FlutterCallkeep extends EventManager {
     }
     return false;
   }
-
+  Future<void> rebirthApp() async {
+  await _channel.invokeMethod<void>(
+  'rebirthApp');
+  }
   Future<void> displayIncomingCall(String uuid, String handle,
       {String localizedCallerName = '',
       String handleType = 'number',
