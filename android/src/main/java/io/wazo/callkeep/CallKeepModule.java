@@ -63,7 +63,7 @@ import io.wazo.callkeep.utils.Callback;
 import io.wazo.callkeep.utils.ConstraintsMap;
 import io.wazo.callkeep.utils.ConstraintsArray;
 import io.wazo.callkeep.utils.PermissionUtils;
-
+import com.jakewharton.processphoenix.ProcessPhoenix;
 import static io.wazo.callkeep.Constants.*;
 
 // @see https://github.com/kbagchiGWC/voice-quickstart-android/blob/9a2aff7fbe0d0a5ae9457b48e9ad408740dfb968/exampleConnectionService/src/main/java/com/twilio/voice/examples/connectionservice/VoiceConnectionServiceActivity.java
@@ -213,6 +213,10 @@ public class CallKeepModule {
                 result.success(null);
             }
             break;
+            case "rebirthApp": {
+                triggerRebirth(_context);
+            }
+            break;
             default:
                 return false;
         }
@@ -255,9 +259,9 @@ public class CallKeepModule {
 
     
     public void displayIncomingCall(String uuid, String number, String callerName) {
-//         if (!isConnectionServiceAvailable() || !hasPhoneAccount()) {
-//             return;
-//         }
+        if (!isConnectionServiceAvailable() || !hasPhoneAccount()) {
+            return;
+        }
 
         Log.d(TAG, "displayIncomingCall number: " + number + ", callerName: " + callerName);
 
@@ -319,11 +323,19 @@ public class CallKeepModule {
             return;
         }
         conn.onDisconnect();
-
         Log.d(TAG, "endCall executed");
     }
 
-    
+    public static void triggerRebirth(Context context) {
+        ProcessPhoenix.triggerRebirth(context);
+//        PackageManager packageManager = context.getPackageManager();
+//        Intent intent = packageManager.getLaunchIntentForPackage(context.getPackageName());
+//        ComponentName componentName = intent.getComponent();
+//        Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+//        context.startActivity(mainIntent);
+//        Runtime.getRuntime().exit(0);
+    }
+
     public void endAllCalls() {
         Log.d(TAG, "endAllCalls called");
         if (!isConnectionServiceAvailable() || !hasPhoneAccount()) {
